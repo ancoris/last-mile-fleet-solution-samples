@@ -19,15 +19,14 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.servlet.ServletException;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -37,6 +36,10 @@ import org.junit.runners.JUnit4;
 import org.junit.runners.MethodSorters;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 /**
  * Tests for exercising the manifest endpoint.
@@ -75,6 +78,12 @@ public class ManifestServletTest {
   public void setUp() {
     request = new MockHttpServletRequest();
     response = new MockHttpServletResponse();
+    // Sleep for 100ms to avoid rate limiting. These tests hit the real API??
+    try {
+        Thread.sleep(100);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
   }
 
   @Test
