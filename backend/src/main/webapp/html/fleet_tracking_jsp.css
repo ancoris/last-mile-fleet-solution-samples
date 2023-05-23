@@ -1,0 +1,17 @@
+.shipments-table .mdc-data-table__header-cell {
+  color: #5f6368;
+}
+
+.shipments-table-container.mdc-data-table {
+  border: none;
+  margin-bottom: 56px;
+}
+
+.shipment-details-table {
+  font-size: 75%;
+}
+
+
+.ancoris .grid__col--info {
+    width: 50vw;
+}

@@ -65,6 +65,8 @@ function initializeJourneySharing() {
 
   app.start();
   optionsModal.setMapView(app.mapView);
+
+//   window.deliveryVehicleTrackingApp = app;
 }
 
 class DeliveryVehicleTrackingApp {
@@ -83,6 +85,9 @@ class DeliveryVehicleTrackingApp {
     this.taskMarkersMap = {};
     // reference to the card on the map
     this.taskDetailsCard = null;
+
+    this.unsuccessfulTaskMarkers_ = {};
+    this.successfulTaskMarkers_ = {};
   }
 
   /**
@@ -124,6 +129,7 @@ class DeliveryVehicleTrackingApp {
       return;
     }
 
+    this.resetTaskDetail();
     this.resetDeliveryVehicleDetailsDisplay();
     this.isLoadingResults = !!newDeliveryVehicleId;
 
@@ -150,6 +156,8 @@ class DeliveryVehicleTrackingApp {
    * sets LocationProvider event listeners.
    */
   start() {
+    this.unsuccessfulTaskMarkers_ = {};
+    this.successfulTaskMarkers_ = {};
     this.locationProvider =
         new google.maps.journeySharing
             .FleetEngineDeliveryVehicleLocationProvider({
@@ -162,6 +170,7 @@ class DeliveryVehicleTrackingApp {
               // Show all incomplete tasks as well as complete ones
               taskFilterOptions: {},
               shouldShowTasks: this.optionsModal.options.showTasks,
+              staleLocationThresholdMillis: Infinity,
               shouldShowOutcomeLocations:
                   this.optionsModal.options.showOutcomeLocations,
               taskMarkerCustomization: (params) => {
@@ -175,10 +184,13 @@ class DeliveryVehicleTrackingApp {
                       this.optionsModal.options.unsuccessfulTaskIcon);
                 }
                 params.marker.setIcon(icon);
+                this.updateMarkerOutcomes(params);
               },
-              taskOutcomeMarkerCustomization: {
-                icon: this.optionsModal.getIcon(
-                    this.optionsModal.options.taskOutcomeIcon),
+              taskOutcomeMarkerCustomization: (params) => {
+                const icon = this.optionsModal.getIcon(
+                    this.optionsModal.options.taskOutcomeIcon);
+                params.marker.setIcon(icon);
+                this.updateMarkerOutcomes(params);
               },
               plannedStopMarkerCustomization: {
                 icon: this.optionsModal.getIcon(
@@ -262,6 +274,19 @@ class DeliveryVehicleTrackingApp {
     });
   }
 
+  updateMarkerOutcomes(params) {
+    delete this.successfulTaskMarkers_[params.task.name];
+    delete this.unsuccessfulTaskMarkers_[params.task.name];
+
+    if (params.task.outcome === 'SUCCEEDED') {
+        this.successfulTaskMarkers_[params.task.name] = params.marker;
+        this.updateMarkers();
+    } else if (params.task.outcome === 'FAILED') {
+        this.unsuccessfulTaskMarkers_[params.task.name] = params.marker;
+        this.updateMarkers();
+    }
+  }
+
   /**
    * Resets DOM elements and restarts the delivery vehicle tracking demo app.
    */
@@ -321,7 +346,7 @@ class DeliveryVehicleTrackingApp {
     for (const task of this.tasks_) {
       this.tasksMap[this.plannedTaskLatLng(task)] = task;
     }
-    for (const marker of this.mapView.unsuccessfulTaskMarkers) {
+    for (const marker of Object.values(this.unsuccessfulTaskMarkers_)) {
       if (this.markerLatLng(marker) in this.tasksMap) {
         this.taskMarkersMap[this.markerLatLng(marker)] = marker;
       }
@@ -405,6 +430,9 @@ class DeliveryVehicleTrackingApp {
     for (const vjs of this.vehicle_.remainingVehicleJourneySegments) {
       for (const t of vjs.stop.tasks) {
         const task = taskIdsMap[t.id];
+        if (!task) {
+            continue;
+        }
         if (task.outcome != null) {
           continue;
         }
@@ -433,7 +461,7 @@ class DeliveryVehicleTrackingApp {
       return;
     }
 
-    for (const marker of this.mapView.unsuccessfulTaskMarkers) {
+    for (const marker of Object.values(this.unsuccessfulTaskMarkers_)) {
       if (this.markerLatLng(marker) in this.tasksMap) {
         const task = this.tasksMap[this.markerLatLng(marker)];
         const markerSymbol = marker.getIcon();
@@ -454,7 +482,7 @@ class DeliveryVehicleTrackingApp {
       }
     }
 
-    for (const marker of this.mapView.successfulTaskMarkers) {
+    for (const marker of Object.values(this.successfulTaskMarkers_)) {
       if (this.markerLatLng(marker) in this.tasksMap) {
         const task = this.tasksMap[this.markerLatLng(marker)];
         google.maps.event.clearListeners(marker, 'click');
