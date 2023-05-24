@@ -30,6 +30,6 @@ public final class SampleServletModule extends ServletModule {
     serve("/backend_config").with(BackendConfigServlet.class);
     serve("/manifest", "/manifest/*").with(ManifestServlet.class);
     serve("/config.js").with(JavaScriptConfigServlet.class);
-    serve("/fleet").with(FleetServlet.class);
+    serve("/fleet", "/fleet/*").with(FleetServlet.class);
   }
 }

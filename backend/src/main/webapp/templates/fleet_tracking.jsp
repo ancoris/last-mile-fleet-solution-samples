@@ -60,6 +60,38 @@
     <div id="options-container"></div>
 
     <div class="grid">
+        <div class="grid__col grid__col--vehicles">
+            <h3 role="heading" aria-level="1" style=" font-family: 'Google Sans', 'Roboto', sans-serif !important; font-weight: 400; margin-top: 0.25rem">Fleet of Vehicles</h3>
+            <ul class="vehicleChooser mdc-deprecated-list" role="radiogroup">
+              <c:forEach items="${deliveryVehicles}" var="vehicle" varStatus="deliveryVehiclesStatus">
+                <c:catch var="exception">
+                  <c:set var="nameParts" value="${fn:split(vehicle.name, '/')}" />
+                  <c:set var="uiName" value="${nameParts[fn:length(nameParts) - 1]}" />
+                  <li class="mdc-deprecated-list-item" role="radio" aria-checked='<c:choose><c:when test="${deliveryVehiclesStatus.getIndex() == 0}">true</c:when><c:otherwise>false</c:otherwise></c:choose>' tabindex='<c:choose><c:when test="${deliveryVehiclesStatus.getIndex() == 0}">0</c:when><c:otherwise>-1</c:otherwise></c:choose>'>
+                    <span class="mdc-deprecated-list-item__ripple"></span>
+                    <span class="mdc-deprecated-list-item__graphic">
+                        <div class="mdc-radio">
+                            <input class="mdc-radio__native-control"
+                                type="radio"
+                                id="list-radio-item-${vehicle.name}"
+                                name="deliveryVehicle"
+                                value="${vehicle.name}"
+                                data-name="${vehicle.name}"
+                                data-uiname="${uiName}"
+                                <c:choose><c:when test="${deliveryVehiclesStatus.getIndex() == 0}">checked</c:when></c:choose> />
+                            <div class="mdc-radio__background">
+                                <div class="mdc-radio__outer-circle"></div>
+                                <div class="mdc-radio__inner-circle"></div>
+                            </div>
+                        </div>
+                    </span>
+                    <label class="mdc-deprecated-list-item__text" for="list-radio-item-${vehicle.name}">${uiName}</label>
+                  </li>
+                </c:catch>
+              </c:forEach>
+            </ul>
+          </div>
+
       <div class="grid__col grid__col--info">
         <div class="input-container">
           <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon"
@@ -186,48 +218,14 @@
       <p class="mdc-typography mdc-typography--body1" style="margin:0"><span class="address"></span></p>
     </div>
   </div>
-  <div>
-    <ul class="vehicleChooser mdc-deprecated-list" role="radiogroup">
-      <c:forEach items="${deliveryVehicles}" var="vehicle" varStatus="deliveryVehiclesStatus">
-        <c:catch var="exception">
-          <c:set var="nameParts" value="${fn:split(vehicle.name, '/')}" />
-          <c:set var="uiName" value="${nameParts[fn:length(nameParts) - 1]}" />
-          <li class="mdc-deprecated-list-item" role="radio" aria-checked='<c:choose><c:when test="${deliveryVehiclesStatus.getIndex() == 0}">true</c:when><c:otherwise>false</c:otherwise></c:choose>' tabindex='<c:choose><c:when test="${deliveryVehiclesStatus.getIndex() == 0}">0</c:when><c:otherwise>-1</c:otherwise></c:choose>'>
-            <span class="mdc-deprecated-list-item__ripple"></span>
-            <span class="mdc-deprecated-list-item__graphic">
-                <div class="mdc-radio">
-                    <input class="mdc-radio__native-control"
-                        type="radio"
-                        id="list-radio-item-${vehicle.name}"
-                        name="deliveryVehicle"
-                        value="${vehicle.name}"
-                        data-name="${vehicle.name}"
-                        data-uiname="${uiName}"
-                        <c:choose><c:when test="${deliveryVehiclesStatus.getIndex() == 0}">checked</c:when></c:choose> />
-                    <div class="mdc-radio__background">
-                        <div class="mdc-radio__outer-circle"></div>
-                        <div class="mdc-radio__inner-circle"></div>
-                    </div>
-                </div>
-            </span>
-            <label class="mdc-deprecated-list-item__text" for="list-radio-item-${vehicle.name}">${uiName}</label>
-          </li>
-        </c:catch>
-      </c:forEach>
-    </ul>
-  </div>
 </body>
 <script src="options_fleet.js" defer></script>
 <script src="fleet_tracking_jsp.js" defer></script>
 <script src="fleet_tracking_jsp_ancoris.js" defer></script>
 <script src="config.js"></script>
-<script defer>
-  var script = document.createElement('script');
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=initializeJourneySharing&v=beta&libraries=journeySharing`;
-  script.defer = true;
-  document.head.appendChild(script);
-</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=initializeJourneySharing&v=beta&libraries=journeySharing" defer></script>
 <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.3.1/moment.min.js" integrity="sha512-XmlzdZO9UbgsZxntPxZS6FG5uPMcdWmY+VaYvw7ENvaBwab9Wk3JK76ivbjjSh+EuD4Wglnixj1LFSdjaEHq3A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <!-- Attach Material Design classes to elements. -->
 <script>
     window.addEventListener("DOMContentLoaded", () => {

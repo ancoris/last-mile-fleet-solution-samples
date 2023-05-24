@@ -37,42 +37,42 @@ const ICON_OPTIONS = {
     path: 'M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z',
     fillOpacity: 0.9,
     scale: 1.2,
-    fillColor: '#4285f4',
+    fillColor: '#4285f4', // blue
     anchor: {x: 12, y: 12},
   },
   defaultDestinationIcon: {
     path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
     fillOpacity: 0.9,
     scale: 1.5,
-    fillColor: '#ea4335',
+    fillColor: '#ea4335', // red
     anchor: {x: 12, y: 23},
   },
   defaultWaypointIcon: {
     path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
     fillOpacity: 0.9,
     scale: 1.5,
-    fillColor: '#03a9f4',
+    fillColor: '#03a9f4', // light blue
     anchor: {x: 12, y: 23},
   },
   defaultSuccessfulTaskIcon: {
     path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
     fillOpacity: 0.9,
     scale: 1.5,
-    fillColor: '#41b375',
+    fillColor: '#41b375', // green
     anchor: {x: 12, y: 23},
   },
   defaultUnsuccessfulTaskIcon: {
     path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
     fillOpacity: 0.9,
     scale: 1.5,
-    fillColor: '#e67C73',
+    fillColor: '#e67C73', // red
     anchor: {x: 12, y: 23},
   },
   defaultTaskOutcomeIcon: {
     path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
     fillOpacity: 0.9,
     scale: 1.5,
-    fillColor: '#bababa',
+    fillColor: '#bababa', // grey
     anchor: {x: 12, y: 23},
   }
 };

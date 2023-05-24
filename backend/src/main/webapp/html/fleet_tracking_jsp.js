@@ -66,7 +66,7 @@ function initializeJourneySharing() {
   app.start();
   optionsModal.setMapView(app.mapView);
 
-//   window.deliveryVehicleTrackingApp = app;
+  window.deliveryVehicleTrackingApp = app;
 }
 
 class DeliveryVehicleTrackingApp {
@@ -170,7 +170,7 @@ class DeliveryVehicleTrackingApp {
               // Show all incomplete tasks as well as complete ones
               taskFilterOptions: {},
               shouldShowTasks: this.optionsModal.options.showTasks,
-              staleLocationThresholdMillis: Infinity,
+              staleLocationThresholdMillis: -1,
               shouldShowOutcomeLocations:
                   this.optionsModal.options.showOutcomeLocations,
               taskMarkerCustomization: (params) => {

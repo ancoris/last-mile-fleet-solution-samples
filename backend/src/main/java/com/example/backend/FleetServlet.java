@@ -1,6 +1,7 @@
 package com.example.backend;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.example.backend.auth.grpcservice.AuthenticatedGrpcServiceProvider;
+import com.example.backend.json.BackendConfigGsonProvider;
 import com.example.backend.utils.BackendConfigUtils;
 import com.example.backend.utils.SampleBackendUtils;
 
@@ -37,12 +39,23 @@ public final class FleetServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("API_KEY", SampleBackendUtils.backendProperties.apiKey());
-        request.setAttribute("deliveryVehicles", listDeliveryVehicles());
+        response.setCharacterEncoding("UTF-8");
 
+        List<DeliveryVehicle> deliveryVehicles = listDeliveryVehicles();
+        if (request.getPathInfo() == null){
+            response.setContentType("text/html");
 
-        RequestDispatcher view = request.getRequestDispatcher("templates/fleet_tracking.jsp");
-        view.forward(request, response);
+            request.setAttribute("API_KEY", SampleBackendUtils.backendProperties.apiKey());
+            request.setAttribute("deliveryVehicles", deliveryVehicles);
+            RequestDispatcher view = request.getRequestDispatcher("/templates/fleet_tracking.jsp");
+            view.forward(request, response);
+        } else {
+            response.setContentType("application/json");
+
+            PrintWriter responseWriter = response.getWriter();
+            responseWriter.print(BackendConfigGsonProvider.get().toJson(deliveryVehicles));
+            responseWriter.flush();
+        }
     }
 
     private List<DeliveryVehicle> listDeliveryVehicles() {
