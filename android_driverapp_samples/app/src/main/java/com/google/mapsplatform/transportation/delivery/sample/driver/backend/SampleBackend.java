@@ -18,6 +18,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import android.content.Context;
 import android.net.Uri;
+
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.work.Constraints;
 import androidx.work.Data;
@@ -27,24 +29,28 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkInfo.State;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
+
+import com.google.android.libraries.navigation.SpeedAlertSeverity;
 import com.google.common.base.VerifyException;
 import com.google.common.io.CharStreams;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
-import com.google.mapsplatform.transportation.delivery.sample.driver.MainActivity;
-import com.google.mapsplatform.transportation.delivery.sample.driver.settings.Preferences;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+import com.google.mapsplatform.transportation.delivery.sample.driver.settings.Preferences;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.Instant;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
 import javax.annotation.Nullable;
 
 /**
@@ -69,6 +75,8 @@ public class SampleBackend implements DeliveryBackend {
 
   /** Endpoint to fetch untrusted driver tokens by vehicle ID. */
   public Uri tokenEndpoint;
+
+  public Uri speedingEndpoint;
 
   /** ID of the vehicle on Fleet Engine. */
   private String vehicleId = "";
@@ -251,12 +259,12 @@ public class SampleBackend implements DeliveryBackend {
         .build();
     workManager.enqueue(networkWorkRequest);
     LiveData<WorkInfo> liveData = workManager.getWorkInfoByIdLiveData(networkWorkRequest.getId());
-    liveData.observe((MainActivity) context, workInfo -> {
+    liveData.observe((AppCompatActivity) context, workInfo -> {
       if (workInfo.getState() != null && workInfo.getState().isFinished()) {
         if (callback != null) {
           callback.run(workInfo);
         }
-        liveData.removeObservers((MainActivity) context);
+        liveData.removeObservers((AppCompatActivity) context);
       }
     });
   }
@@ -281,12 +289,12 @@ public class SampleBackend implements DeliveryBackend {
         .build();
     workManager.enqueue(networkWorkRequest);
     LiveData<WorkInfo> liveData = workManager.getWorkInfoByIdLiveData(networkWorkRequest.getId());
-    liveData.observe((MainActivity) context, workInfo -> {
+    liveData.observe((AppCompatActivity) context, workInfo -> {
       if (workInfo.getState() != null && workInfo.getState().isFinished()) {
         if (callback != null) {
           callback.run(workInfo);
         }
-        liveData.removeObservers((MainActivity) context);
+        liveData.removeObservers((AppCompatActivity) context);
       }
     });
   }
@@ -307,6 +315,19 @@ public class SampleBackend implements DeliveryBackend {
     }
 
     throw new VerifyException("Could not retrieve token.");
+  }
+
+  public ListenableFuture<String> postSpeeding(String vehicleId, float percentageAboveLimit, SpeedAlertSeverity speedAlertSeverity) {
+    Instant now = Instant.now();
+    SettableFuture<String> future = SettableFuture.create();
+    schedulePost(
+            speedingEndpoint.toString(),
+            String.format("{\"vehicleId\":\"%s\",\"percentageAboveLimit\":%.2f,\"speedAlertSeverity\":\"%s\",\"timestamp\":%d}", vehicleId, percentageAboveLimit, speedAlertSeverity.toString(), now.toEpochMilli()).getBytes(UTF_8),
+            workInfo -> {
+                future.set(gson.toJson(workInfo.getOutputData()));
+            },
+            false);
+    return future;
   }
 
   public static String postWithPayload(String url, byte[] payload) throws IOException {
@@ -370,5 +391,6 @@ public class SampleBackend implements DeliveryBackend {
     taskEndpoint = Uri.withAppendedPath(backendHostPrefix, "task");
     vehicleEndpoint = Uri.withAppendedPath(backendHostPrefix, "manifest");
     tokenEndpoint = Uri.withAppendedPath(backendHostPrefix, "token/delivery_driver");
+    speedingEndpoint = Uri.withAppendedPath(backendHostPrefix, "speeding");
   }
 }

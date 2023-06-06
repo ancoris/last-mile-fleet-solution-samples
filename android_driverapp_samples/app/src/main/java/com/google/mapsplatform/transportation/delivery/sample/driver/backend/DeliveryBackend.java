@@ -14,6 +14,7 @@
  */
 package com.google.mapsplatform.transportation.delivery.sample.driver.backend;
 
+import com.google.android.libraries.navigation.SpeedAlertSeverity;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.JsonObject;
 import java.util.List;
@@ -72,4 +73,6 @@ public interface DeliveryBackend {
    * To reorder the stops, use a stopIdList that corresponds to the new order of the stops.
    */
   ListenableFuture<Boolean> updateStopIdList(List<String> stopIdList);
+
+  ListenableFuture<String> postSpeeding(String vehicleId, float percentageAboveLimit, SpeedAlertSeverity speedAlertSeverity);
 }
