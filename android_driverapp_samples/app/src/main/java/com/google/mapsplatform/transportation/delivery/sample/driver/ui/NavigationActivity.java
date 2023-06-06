@@ -280,8 +280,8 @@ public class NavigationActivity extends AppCompatActivity {
                         arrivalListener = arrivalEvent -> onArrive();
                         navigator.addArrivalListener(arrivalListener);
 
-                        float minorSpeedAlertThresholdPercentage = 5;
-                        float majorSpeedAlertThresholdPercentage = 10;
+                        float minorSpeedAlertThresholdPercentage = 25;
+                        float majorSpeedAlertThresholdPercentage = 50;
                         double severityUpgradeDurationSeconds = 30;
 
                         SpeedAlertOptions speedAlertOptions = new SpeedAlertOptions.Builder().setSpeedAlertThresholdPercentage(
@@ -367,7 +367,7 @@ public class NavigationActivity extends AppCompatActivity {
                         NavigationActivity.this.navigator
                                 .getSimulator()
                                 .simulateLocationsAlongExistingRoute(
-                                        new SimulationOptions().speedMultiplier(6));
+                                        new SimulationOptions().speedMultiplier(1.5f));
                     }
                     NavigationActivity.this.navigator.startGuidance();
                 });
