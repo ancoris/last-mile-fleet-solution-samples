@@ -157,6 +157,27 @@ This document requires the use of the following pieces of information:
 
 ### Start the backend host
 
+
+#### Ancoris (JG)
+
+Running for the first time...
+
+```shell
+cd ./backend/
+./gradlew appengineRun &
+```
+
+If iterating quickly and frequent restarts of the server are required, this will likely be more useful as it stops and restarts the server in one command...
+
+```shell
+cd ./backend/
+./gradlew appengineStop && fg && ./gradlew appengineRun &
+```
+
+If you need to see / read the server logs you can `fg` to foreground the process
+
+#### Original (Google)
+
 Start the backend host first. By default, this runs on your workstation on port
 8080.
 
@@ -168,8 +189,8 @@ $ ./gradlew appengineRun
 Open a browser to <http://localhost:8080/> and verify that the backend has
 started.
 
-Do not use `ctrl-c` to stop the backend host, as this may cause it to retain the
-port and cause re-starts to fail.
+**Do not use `ctrl-c` to stop the backend host, as this may cause it to retain the
+port and cause re-starts to fail.**
 
 To stop the backend, open another terminal window and run:
 
