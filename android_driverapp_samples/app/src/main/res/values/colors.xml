@@ -23,4 +23,15 @@
   <color name="lightRed">#FAD2CF</color>
   <color name="darkRed">#A50E0E</color>
   <color name="fragmentHeaderTextColor">#202124</color>
+
+  <color name="minorSpeedAlertBackgroundColorDayMode">#FFC0CB</color>
+  <color name="majorSpeedAlertTextColorDayMode">#FFC0CB</color>
+  <color name="majorSpeedAlertTextColorNightMode">#FFC0CB</color>
+
+  <color name="minorSpeedAlertBackgroundColorNightMode">#4B0082</color>
+
+  <color name="minorSpeedAlertTextColorDayMode">#FF00FF</color>
+  <color name="minorSpeedAlertTextColorNightMode">#FF00FF</color>
+  <color name="majorSpeedAlertBackgroundColorDayMode">#FF00FF</color>
+  <color name="majorSpeedAlertBackgroundColorNightMode">#FF00FF</color>
 </resources>
