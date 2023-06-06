@@ -404,13 +404,14 @@ public class DeliveryManager {
           }
         }
         if (callback != null) {
-          callback.run(failedTaskIds);
+          callback.run(failedTaskIds, null);
         }
       }
 
       @Override
       public void onFailure(Throwable t) {
         // the future created by successfulAsList shouldn't have an onFailure mode.
+        callback.run(null, t);
       }
     }, MoreExecutors.directExecutor());
   }
@@ -485,7 +486,7 @@ public class DeliveryManager {
   }
 
   public interface UpdateTaskOutcomeCallback {
-    void run(List<String> failedTaskIds);
+    void run(List<String> failedTaskIds, Throwable throwable);
   }
 
   public interface UpdateStopsCallback {

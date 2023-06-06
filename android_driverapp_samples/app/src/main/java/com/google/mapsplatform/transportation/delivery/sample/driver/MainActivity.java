@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
   public void launchNavigationActivity(AppVehicleStop vehicleStop) {
     Intent intent = new Intent(this, NavigationActivity.class);
     intent.putExtra(NavigationActivity.EXTRA_END_LOCATION,
-        vehicleStop.getWaypoint().getPosition());
+            vehicleStop.getWaypoint().getPosition());
     intent.putExtra(NavigationActivity.EXTRA_END_LOCATION_ADDRESS,
         vehicleStop.getWaypoint().getTitle());
     intent.putExtra(NavigationActivity.EXTRA_DETAIL,
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   public void markTasks(List<Task> tasks, boolean successful) {
-    deliveryManager.updateTaskOutcome(tasks, successful, failedTaskIds -> {
+    deliveryManager.updateTaskOutcome(tasks, successful, (failedTaskIds, throwableX) -> {
       // Just report the number of failed task outcomes for now.
       if (failedTaskIds.isEmpty()) {
         String msg = getResources().getString(R.string.task_outcomes_update_done);
