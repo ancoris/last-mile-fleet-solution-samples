@@ -61,13 +61,13 @@
 
     <div class="grid">
         <div class="grid__col grid__col--vehicles">
-            <h3 role="heading" aria-level="1" style=" font-family: 'Google Sans', 'Roboto', sans-serif !important; font-weight: 400; margin-top: 0.25rem">Fleet of Vehicles</h3>
+            <h3 role="heading" id="vehicleChooserHeading" aria-level="1" style=" font-family: 'Google Sans', 'Roboto', sans-serif !important; font-weight: 400; margin-top: 0.25rem">Fleet of Vehicles (${fn:length(deliveryVehicles)})</h3>
             <ul class="vehicleChooser mdc-deprecated-list" role="radiogroup">
               <c:forEach items="${deliveryVehicles}" var="vehicle" varStatus="deliveryVehiclesStatus">
                 <c:catch var="exception">
                   <c:set var="nameParts" value="${fn:split(vehicle.name, '/')}" />
                   <c:set var="uiName" value="${nameParts[fn:length(nameParts) - 1]}" />
-                  <li class="mdc-deprecated-list-item" role="radio" aria-checked='<c:choose><c:when test="${deliveryVehiclesStatus.getIndex() == 0}">true</c:when><c:otherwise>false</c:otherwise></c:choose>' tabindex='<c:choose><c:when test="${deliveryVehiclesStatus.getIndex() == 0}">0</c:when><c:otherwise>-1</c:otherwise></c:choose>'>
+                  <li class="mdc-deprecated-list-item" id="row_${uiName}" role="radio" aria-checked='<c:choose><c:when test="${deliveryVehiclesStatus.getIndex() == 0}">true</c:when><c:otherwise>false</c:otherwise></c:choose>' tabindex='<c:choose><c:when test="${deliveryVehiclesStatus.getIndex() == 0}">0</c:when><c:otherwise>-1</c:otherwise></c:choose>'>
                     <span class="mdc-deprecated-list-item__ripple"></span>
                     <span class="mdc-deprecated-list-item__graphic">
                         <div class="mdc-radio">
@@ -205,6 +205,7 @@
         </div>
       </div>
       <div class="grid__col grid__col--map">
+        <div id="vehicleSpeedingInfo" class="speeding-none">Speeding data currently unavailable</div>
         <div id="map_canvas"></div>
       </div>
     </div>

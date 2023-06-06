@@ -2,6 +2,8 @@ package com.example.backend;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -42,7 +44,7 @@ public final class FleetServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         List<DeliveryVehicle> deliveryVehicles = listDeliveryVehicles();
-        if (request.getPathInfo() == null){
+        if (request.getPathInfo() == null) {
             response.setContentType("text/html");
 
             request.setAttribute("API_KEY", SampleBackendUtils.backendProperties.apiKey());
@@ -65,6 +67,25 @@ public final class FleetServlet extends HttpServlet {
         DeliveryServiceGrpc.DeliveryServiceBlockingStub authenticatedDeliveryService = grpcServiceProvider
                 .getAuthenticatedDeliveryService();
         ListDeliveryVehiclesResponse response = authenticatedDeliveryService.listDeliveryVehicles(request);
-        return response.getDeliveryVehiclesList();
+        List<DeliveryVehicle> immutableDeliveryVehiclesList = response.getDeliveryVehiclesList();
+        List<DeliveryVehicle> mutableDeliveryVehiclesList = new ArrayList<>(immutableDeliveryVehiclesList);
+        Collections.sort(mutableDeliveryVehiclesList,
+                (DeliveryVehicle a, DeliveryVehicle b) -> {
+                    long diff = getTimestampMs(b) - getTimestampMs(a);
+                    if (diff < 0) {
+                        return -1;
+                    } else if (diff > 0) {
+                        return 1;
+                    }
+                    return 0;
+                });
+        return Collections.unmodifiableList(mutableDeliveryVehiclesList);
+    }
+
+    private long getTimestampMs(DeliveryVehicle deliveryVehicle) {
+        String[] bits = deliveryVehicle.getName().split("_");
+        String timestamp = bits[bits.length - 1];
+        Long timestampMs = Long.valueOf(timestamp);
+        return timestampMs == null ? 0 : timestampMs;
     }
 }

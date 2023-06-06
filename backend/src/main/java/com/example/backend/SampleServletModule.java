@@ -31,5 +31,6 @@ public final class SampleServletModule extends ServletModule {
     serve("/manifest", "/manifest/*").with(ManifestServlet.class);
     serve("/config.js").with(JavaScriptConfigServlet.class);
     serve("/fleet", "/fleet/*").with(FleetServlet.class);
+    serve("/speeding").with(SpeedingServlet.class);
   }
 }

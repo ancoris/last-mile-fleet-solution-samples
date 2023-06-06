@@ -21,3 +21,27 @@
     height: 100%;
     overflow: auto;
 }
+
+.ancoris #vehicleSpeedingInfo {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-block-end: 1em;
+    padding: 0.5em;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.ancoris #vehicleSpeedingInfo.speeding-major {
+    border-color: #FF2400;
+    color: #FF2400;
+}
+
+.ancoris #vehicleSpeedingInfo.speeding-minor {
+    border-color: #E4717A;
+    color: #E4717A;
+}
+
+.ancoris #vehicleSpeedingInfo.speeding-none {
+    border-color: #D3D3D3;
+    color: #D3D3D3;
+}

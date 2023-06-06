@@ -347,6 +347,7 @@ class DeliveryVehicleTrackingApp {
       this.tasksMap[this.plannedTaskLatLng(task)] = task;
     }
     for (const marker of Object.values(this.unsuccessfulTaskMarkers_)) {
+    // for (const marker of this.mapView.unsuccessfulTaskMarkers) {
       if (this.markerLatLng(marker) in this.tasksMap) {
         this.taskMarkersMap[this.markerLatLng(marker)] = marker;
       }
@@ -405,6 +406,7 @@ class DeliveryVehicleTrackingApp {
       n.id = `task-row-${task.id}`;
       n.getElementsByClassName('stop_index')[0].innerText = `${taskCounter}`;
       n.getElementsByClassName('tracking_id')[0].innerText = task.trackingId;
+      n.getElementsByClassName('tracking_id')[0].title = task.trackingId;
       n.getElementsByClassName('type')[0].innerText = typeString(task);
       n.getElementsByClassName('status')[0].innerHTML = statusIcon(task);
 
@@ -443,6 +445,7 @@ class DeliveryVehicleTrackingApp {
         n.id = `task-row-${t.id}`;
         n.getElementsByClassName('stop_index')[0].innerText = `${taskCounter}`;
         n.getElementsByClassName('tracking_id')[0].innerText = task.trackingId;
+        n.getElementsByClassName('tracking_id')[0].title = task.trackingId;
         n.getElementsByClassName('type')[0].innerText = typeString(task);
         n.getElementsByClassName('status')[0].innerHTML = statusIcon(task);
         n.getElementsByClassName('time')[0].innerText = '-';
@@ -462,6 +465,7 @@ class DeliveryVehicleTrackingApp {
     }
 
     for (const marker of Object.values(this.unsuccessfulTaskMarkers_)) {
+    // for (const marker of this.mapView.unsuccessfulTaskMarkers) {
       if (this.markerLatLng(marker) in this.tasksMap) {
         const task = this.tasksMap[this.markerLatLng(marker)];
         const markerSymbol = marker.getIcon();
@@ -483,6 +487,7 @@ class DeliveryVehicleTrackingApp {
     }
 
     for (const marker of Object.values(this.successfulTaskMarkers_)) {
+    // for (const marker of this.mapView.successfulTaskMarkers) {
       if (this.markerLatLng(marker) in this.tasksMap) {
         const task = this.tasksMap[this.markerLatLng(marker)];
         google.maps.event.clearListeners(marker, 'click');
